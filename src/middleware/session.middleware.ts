@@ -3,7 +3,6 @@ import { Mongo } from '@telegraf/session/mongodb';
 import * as dotenv from 'dotenv';
 import { IContext } from '../type/context.interface';
 
-
 dotenv.config();
 
 const mongoStore = Mongo({
