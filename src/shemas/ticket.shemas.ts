@@ -10,7 +10,7 @@ export class Ticket extends Document {
   @Prop({ required: true })
   clientName: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, type: Object })
   clientFullName: ClientFullName;
 
   @Prop({ required: true })

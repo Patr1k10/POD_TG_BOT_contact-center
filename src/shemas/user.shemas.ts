@@ -7,7 +7,7 @@ export class User extends Document {
   @Prop({ required: true })
   userId: number;
 
-  @Prop({ required: true })
+  @Prop({ required: true, type: Object })
   phoneNumber: PhoneNumber;
 
   @Prop({ required: true })
