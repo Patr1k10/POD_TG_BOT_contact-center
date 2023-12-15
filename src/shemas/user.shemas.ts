@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { PhoneNumber } from '../type/pfone.nomber';
+import { FullPhoneNumber } from '../type/full.pfone.nomber.interface';
 
 @Schema()
 export class User extends Document {
@@ -8,7 +8,7 @@ export class User extends Document {
   userId: number;
 
   @Prop({ required: true, type: Object })
-  phoneNumber: PhoneNumber;
+  fullPhoneNumber: FullPhoneNumber;
 
   @Prop({ required: true })
   userName: string;

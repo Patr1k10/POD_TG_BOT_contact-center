@@ -6,7 +6,8 @@ import { Ticket, TicketSchema } from './shemas/ticket.shemas';
 import { User, UserSchema } from './shemas/user.shemas';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { createSessionMiddleware } from './middleware/session.middleware';
-import { BasicCommandsHandler } from './handler/basicCommands.handler';
+import { StartAndRegisterHandler } from './handler/start.and.register.handler';
+import { RegisterService } from './service/register.service';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { BasicCommandsHandler } from './handler/basicCommands.handler';
       { name: User.name, schema: UserSchema },
     ]),
   ],
-  providers: [BasicCommandsHandler],
+  providers: [StartAndRegisterHandler, RegisterService],
   exports: [],
 })
 export class AppModule {}

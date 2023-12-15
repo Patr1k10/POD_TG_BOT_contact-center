@@ -9,3 +9,18 @@ export const createPhoneNumberButton = () => {
 export function registerButton() {
   return Markup.inlineKeyboard([Markup.button.callback('Реєстрація📝', 'register')]);
 }
+
+export function groupMenu() {
+  return Markup.inlineKeyboard(
+    [
+      Markup.button.callback('', ''),
+      Markup.button.callback('', ''),
+      Markup.button.callback('', ''),
+      Markup.button.callback('', ''),
+      Markup.button.callback('', ''),
+    ],
+    {
+      columns: 2,
+    },
+  );
+}

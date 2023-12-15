@@ -3,10 +3,13 @@ import { Logger } from '@nestjs/common';
 import { IContext } from '../type/context.interface';
 import { IMessage } from '../type/message.interface';
 import { createPhoneNumberButton, registerButton } from '../battons/app.buttons';
+import { RegisterService } from '../service/register.service';
 
 @Update()
-export class BasicCommandsHandler {
-  private readonly logger: Logger = new Logger(BasicCommandsHandler.name);
+export class StartAndRegisterHandler {
+  private readonly logger: Logger = new Logger(StartAndRegisterHandler.name);
+
+  constructor(private readonly registerService: RegisterService) {}
 
   @Start()
   async startCommand(ctx: IContext) {
@@ -33,14 +36,24 @@ export class BasicCommandsHandler {
   @On('contact')
   async onContact(ctx: IContext) {
     const message = ctx.message as IMessage;
-    if (!message.contact.last_name) {
-      await ctx.reply('Будь ласка додайте призвише');
-      ctx.session.awaitingUserIdInput = true;
-    }
     ctx.session.phone_number = message.contact.phone_number;
     ctx.session.first_name = message.contact.first_name;
     ctx.session.last_name = message.contact.last_name;
-    this.logger.log(message.contact);
+    if (!message.contact.last_name) {
+      await ctx.reply('Будь ласка додайте призвише');
+      ctx.session.awaitingUserIdInput = true;
+      return;
+    }
+    const { phone_number } = ctx.session;
+    const countryCode = phone_number.substring(0, 3);
+    const phoneNumber = phone_number.substring(3);
+    await this.registerService.registerUser({
+      userId: message.from.id,
+      fullPhoneNumber: { countryCode, phoneNumber },
+      userName: message.from.username,
+      userFirstName: ctx.session.first_name,
+      userLastName: ctx.session.last_name,
+    });
   }
 
   @Hears(/^[а-яА-ЯёЁіІїЇґҐ]+$/iu)
@@ -51,5 +64,15 @@ export class BasicCommandsHandler {
     const message = ctx.message as IMessage;
     ctx.session.last_name = message.text;
     ctx.session.awaitingUserIdInput = false;
+    const { phone_number } = ctx.session;
+    const countryCode = phone_number.substring(0, 3);
+    const phoneNumber = phone_number.substring(3);
+    await this.registerService.registerUser({
+      userId: message.from.id,
+      fullPhoneNumber: { countryCode, phoneNumber },
+      userName: message.from.username,
+      userFirstName: ctx.session.first_name,
+      userLastName: ctx.session.last_name,
+    });
   }
 }
