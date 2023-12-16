@@ -1,4 +1,3 @@
-
 export class CreateUserDto {
   userId: number;
   fullPhoneNumber: FullPhoneNumberDto;
