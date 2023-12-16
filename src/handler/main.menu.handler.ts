@@ -55,8 +55,11 @@ export class MainMenuHandler {
 
   @Action('contact_operator')
   async contact_operator(ctx: IContext) {
-    this.logger.log('contact_operator');
-    // Ваша логіка для кнопки "Зв'язок з оператором" тут
+    const operatorTelegramId = process.env.SUPPORT_ID;
+
+    const message = `Користувач хоче зв'язатися із вами. Відправник: @${ctx.from.username}`;
+    await ctx.telegram.sendMessage(operatorTelegramId, message);
+    await ctx.reply('Ваш запит надіслано оператору. Чекайте на відповідь. Чекайте на відповіть в особисті');
   }
 
   @Action('back')
