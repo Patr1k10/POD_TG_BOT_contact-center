@@ -2,14 +2,14 @@ import { Action, Hears, On, Start, Update } from 'nestjs-telegraf';
 import { Logger } from '@nestjs/common';
 import { IContext } from '../type/context.interface';
 import { IMessage } from '../type/message.interface';
-import { createPhoneNumberButton, registerButton } from '../battons/app.buttons';
-import { RegisterService } from '../service/register.service';
+import { createPhoneNumberButton, groupMenu, registerButton } from '../battons/app.buttons';
+import { UserService } from '../service/register.service';
 
 @Update()
 export class StartAndRegisterHandler {
   private readonly logger: Logger = new Logger(StartAndRegisterHandler.name);
 
-  constructor(private readonly registerService: RegisterService) {}
+  constructor(private readonly userService: UserService) {}
 
   @Start()
   async startCommand(ctx: IContext) {
@@ -47,13 +47,14 @@ export class StartAndRegisterHandler {
     const { phone_number } = ctx.session;
     const countryCode = phone_number.substring(0, 3);
     const phoneNumber = phone_number.substring(3);
-    await this.registerService.registerUser({
+    await this.userService.registerUser({
       userId: message.from.id,
       fullPhoneNumber: { countryCode, phoneNumber },
       userName: message.from.username,
       userFirstName: ctx.session.first_name,
       userLastName: ctx.session.last_name,
     });
+    await ctx.reply('🔽Основне меню🔽', groupMenu());
   }
 
   @Hears(/^[а-яА-ЯёЁіІїЇґҐ]+$/iu)
@@ -67,12 +68,13 @@ export class StartAndRegisterHandler {
     const { phone_number } = ctx.session;
     const countryCode = phone_number.substring(0, 3);
     const phoneNumber = phone_number.substring(3);
-    await this.registerService.registerUser({
+    await this.userService.registerUser({
       userId: message.from.id,
       fullPhoneNumber: { countryCode, phoneNumber },
       userName: message.from.username,
       userFirstName: ctx.session.first_name,
       userLastName: ctx.session.last_name,
     });
+    await ctx.reply('🔽Основне меню🔽', groupMenu());
   }
 }
