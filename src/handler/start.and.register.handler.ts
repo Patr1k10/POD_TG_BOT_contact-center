@@ -3,7 +3,7 @@ import { Logger } from '@nestjs/common';
 import { IContext } from '../type/context.interface';
 import { IMessage } from '../type/message.interface';
 import { createPhoneNumberButton, groupMenu, registerButton } from '../battons/app.buttons';
-import { UserService } from '../service/register.service';
+import { UserService } from '../service/user.service';
 
 @Update()
 export class StartAndRegisterHandler {

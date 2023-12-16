@@ -8,6 +8,9 @@ export class Ticket extends Document {
   ticketId: string;
 
   @Prop({ required: true })
+  ownerId: number;
+
+  @Prop({ required: true })
   clientName: string;
 
   @Prop({ required: true, type: Object })
@@ -17,10 +20,13 @@ export class Ticket extends Document {
   eventName: string;
 
   @Prop({ required: true })
-  ticketUrl: string;
+  eventLocation: string;
 
   @Prop({ required: true })
-  visitDate: Date;
+  eventDate: Date;
+
+  @Prop({ required: true })
+  ticketUrl: string;
 
   @Prop({ default: Date.now })
   created_at: Date;

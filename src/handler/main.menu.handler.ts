@@ -1,24 +1,39 @@
 import { Action, Update } from 'nestjs-telegraf';
 import { Logger } from '@nestjs/common';
-import { UserService } from '../service/register.service';
+import { UserService } from '../service/user.service';
 import { IContext } from '../type/context.interface';
+import { eventMenu, groupMenu } from '../battons/app.buttons';
+import { TicketService } from '../service/ticket.service';
+import { HELP_MESSAGE } from '../constants/massage';
 
 @Update()
 export class MainMenuHandler {
   private readonly logger: Logger = new Logger(MainMenuHandler.name);
 
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly ticketService: TicketService,
+  ) {}
 
   @Action('choose_event')
   async choose_event(ctx: IContext) {
     this.logger.log('choose_event');
-    // Ваша логіка для кнопки "Оберіть подію" тут
+    await ctx.reply('Оберіть подію', eventMenu());
   }
 
   @Action('your_tickets')
   async your_tickets(ctx: IContext) {
     this.logger.log('your_tickets');
-    // Ваша логіка для кнопки "Ваші квитки" тут
+    const userId = ctx.from.id;
+    const tickets = await this.ticketService.getTicketByOwnerId(userId);
+    if (tickets.length === 0) {
+      await ctx.reply('У вас немає жодних квитків.');
+    } else {
+      for (const ticket of tickets) {
+        const ticketInfo = `Назва події: ${ticket.eventName}\nДата: ${ticket.eventDate}\nМісце: ${ticket.eventLocation}`;
+        await ctx.reply(ticketInfo);
+      }
+    }
   }
 
   @Action('profile')
@@ -32,28 +47,10 @@ export class MainMenuHandler {
     this.logger.log('profile');
   }
 
-  @Action('reminders')
-  async reminders(ctx: IContext) {
-    this.logger.log('reminders');
-    // Ваша логіка для кнопки "Нагадування" тут
-  }
-
   @Action('support')
   async support(ctx: IContext) {
     this.logger.log('support');
-    // Ваша логіка для кнопки "Підтримка" тут
-  }
-
-  @Action('promocodes')
-  async promocodes(ctx: IContext) {
-    this.logger.log('promocodes');
-    // Ваша логіка для кнопки "Промокоди" тут
-  }
-
-  @Action('payment_options')
-  async payment_options(ctx: IContext) {
-    this.logger.log('payment_options');
-    // Ваша логіка для кнопки "Опції оплати" тут
+    await ctx.reply(HELP_MESSAGE);
   }
 
   @Action('contact_operator')
@@ -62,5 +59,8 @@ export class MainMenuHandler {
     // Ваша логіка для кнопки "Зв'язок з оператором" тут
   }
 
-  // Додайте інші кнопки, які ви маєте в меню...
+  @Action('back')
+  async back(ctx: IContext) {
+    await ctx.reply('🔽Основне меню🔽', groupMenu());
+  }
 }

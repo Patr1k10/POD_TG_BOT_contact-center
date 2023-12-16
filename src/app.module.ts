@@ -7,8 +7,9 @@ import { User, UserSchema } from './shemas/user.shemas';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { createSessionMiddleware } from './middleware/session.middleware';
 import { StartAndRegisterHandler } from './handler/start.and.register.handler';
-import { UserService } from './service/register.service';
+import { UserService } from './service/user.service';
 import { MainMenuHandler } from './handler/main.menu.handler';
+import { TicketService } from './service/ticket.service';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { MainMenuHandler } from './handler/main.menu.handler';
       { name: User.name, schema: UserSchema },
     ]),
   ],
-  providers: [StartAndRegisterHandler, MainMenuHandler, UserService],
+  providers: [StartAndRegisterHandler, MainMenuHandler, UserService, TicketService],
   exports: [],
 })
 export class AppModule {}
