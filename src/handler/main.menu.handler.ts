@@ -5,6 +5,7 @@ import { IContext } from '../type/context.interface';
 import { eventMenu, groupMenu } from '../battons/app.buttons';
 import { TicketService } from '../service/ticket.service';
 import { HELP_MESSAGE } from '../constants/massage';
+import { events } from '../constants/events';
 
 @Update()
 export class MainMenuHandler {
@@ -18,7 +19,7 @@ export class MainMenuHandler {
   @Action('choose_event')
   async choose_event(ctx: IContext) {
     this.logger.log('choose_event');
-    await ctx.reply('Оберіть подію', eventMenu());
+    await ctx.reply('Оберіть подію', eventMenu(events));
   }
 
   @Action('your_tickets')
@@ -30,7 +31,7 @@ export class MainMenuHandler {
       await ctx.reply('У вас немає жодних квитків.');
     } else {
       for (const ticket of tickets) {
-        const ticketInfo = `Назва події: ${ticket.eventName}\nДата: ${ticket.eventDate}\nМісце: ${ticket.eventLocation}`;
+        const ticketInfo = `Назва події: ${ticket.eventName}\nДата: d:${ticket.eventDate.day} m:${ticket.eventDate.month} y:${ticket.eventDate.year}\nМісце: ${ticket.eventLocation}`;
         await ctx.reply(ticketInfo);
       }
     }
