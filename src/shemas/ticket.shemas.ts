@@ -1,17 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { ClientFullName } from '../type/client.full.name';
+import { EventDateInterface } from '../type/event.date.interface';
+import { FullPhoneNumber } from '../type/full.pfone.nomber.interface';
 
 @Schema()
 export class Ticket extends Document {
   @Prop({ required: true })
-  ticketId: string;
-
-  @Prop({ required: true })
   ownerId: number;
-
-  @Prop({ required: true })
-  clientName: string;
 
   @Prop({ required: true, type: Object })
   clientFullName: ClientFullName;
@@ -22,11 +18,11 @@ export class Ticket extends Document {
   @Prop({ required: true })
   eventLocation: string;
 
-  @Prop({ required: true })
-  eventDate: Date;
+  @Prop({ required: true, type: Object })
+  eventDate: EventDateInterface;
 
-  @Prop({ required: true })
-  ticketUrl: string;
+  @Prop({ required: true, type: Object })
+  fullPhoneNumber: FullPhoneNumber;
 
   @Prop({ default: Date.now })
   created_at: Date;

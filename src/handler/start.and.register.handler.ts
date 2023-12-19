@@ -36,25 +36,21 @@ export class StartAndRegisterHandler {
   @On('contact')
   async onContact(ctx: IContext) {
     const message = ctx.message as IMessage;
-    ctx.session.phone_number = message.contact.phone_number;
-    ctx.session.first_name = message.contact.first_name;
-    ctx.session.last_name = message.contact.last_name;
-    if (!message.contact.last_name) {
+    const { phone_number, first_name, last_name } = message.contact;
+    const countryCode = phone_number.substring(0, 3);
+    const phoneNumber = phone_number.substring(3);
+
+    ctx.session.fullPhoneNumber = { countryCode, phoneNumber };
+    ctx.session.first_name = first_name;
+    ctx.session.last_name = last_name;
+
+    if (!last_name) {
       await ctx.reply('Будь ласка додайте призвише');
       ctx.session.awaitingUserIdInput = true;
       return;
     }
-    const { phone_number } = ctx.session;
-    const countryCode = phone_number.substring(0, 3);
-    const phoneNumber = phone_number.substring(3);
-    await this.userService.registerUser({
-      userId: message.from.id,
-      fullPhoneNumber: { countryCode, phoneNumber },
-      userName: message.from.username,
-      userFirstName: ctx.session.first_name,
-      userLastName: ctx.session.last_name,
-    });
-    await ctx.reply('🔽Основне меню🔽', groupMenu());
+
+    await this.registerUser(ctx);
   }
 
   @Hears(/^[а-яА-ЯёЁіІїЇґҐ]+$/iu)
@@ -65,16 +61,19 @@ export class StartAndRegisterHandler {
     const message = ctx.message as IMessage;
     ctx.session.last_name = message.text;
     ctx.session.awaitingUserIdInput = false;
-    const { phone_number } = ctx.session;
-    const countryCode = phone_number.substring(0, 3);
-    const phoneNumber = phone_number.substring(3);
+    await this.registerUser(ctx);
+  }
+
+  private async registerUser(ctx: IContext) {
+    const { fullPhoneNumber, first_name, last_name } = ctx.session;
     await this.userService.registerUser({
-      userId: message.from.id,
-      fullPhoneNumber: { countryCode, phoneNumber },
-      userName: message.from.username,
-      userFirstName: ctx.session.first_name,
-      userLastName: ctx.session.last_name,
+      userId: ctx.from.id,
+      fullPhoneNumber,
+      userName: ctx.from.username,
+      userFirstName: first_name,
+      userLastName: last_name,
     });
+
     await ctx.reply('🔽Основне меню🔽', groupMenu());
   }
 }

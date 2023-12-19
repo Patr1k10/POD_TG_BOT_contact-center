@@ -10,6 +10,7 @@ import { StartAndRegisterHandler } from './handler/start.and.register.handler';
 import { UserService } from './service/user.service';
 import { MainMenuHandler } from './handler/main.menu.handler';
 import { TicketService } from './service/ticket.service';
+import { EventHandler } from './handler/event.handler';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { TicketService } from './service/ticket.service';
       { name: User.name, schema: UserSchema },
     ]),
   ],
-  providers: [StartAndRegisterHandler, MainMenuHandler, UserService, TicketService],
+  providers: [StartAndRegisterHandler, EventHandler, MainMenuHandler, UserService, TicketService],
   exports: [],
 })
 export class AppModule {}
