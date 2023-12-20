@@ -8,9 +8,11 @@ export class TicketService {
   private readonly logger: Logger = new Logger(TicketService.name);
   constructor(@InjectModel('Ticket') private readonly ticketModel: Model<Ticket>) {}
 
+  // Method to retrieve tickets based on ownerId
   async getTicketByOwnerId(ownerId: number): Promise<Ticket[]> {
     return await this.ticketModel.find({ ownerId }).exec();
   }
+  // Method to create a new ticket
   async createTicket(ticketDto: TicketCreatedDto): Promise<Ticket> {
     try {
       const createdTicket = new this.ticketModel(ticketDto);

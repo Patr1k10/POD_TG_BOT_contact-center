@@ -4,7 +4,7 @@ import { FullPhoneNumber } from '../type/full.pfone.nomber.interface';
 
 @Schema()
 export class User extends Document {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   userId: number;
 
   @Prop({ required: true, type: Object })

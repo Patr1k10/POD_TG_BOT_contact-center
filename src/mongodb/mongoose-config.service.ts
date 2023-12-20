@@ -6,6 +6,7 @@ dotenv.config();
 
 @Injectable()
 export class MongooseConfigService implements MongooseOptionsFactory {
+  // Method to create Mongoose connection options based on environment variables
   createMongooseOptions(): MongooseModuleOptions {
     return {
       uri: process.env.MONGODB_URL,
