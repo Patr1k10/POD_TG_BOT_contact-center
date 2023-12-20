@@ -11,6 +11,7 @@ import { UserService } from './service/user.service';
 import { MainMenuHandler } from './handler/main.menu.handler';
 import { TicketService } from './service/ticket.service';
 import { EventHandler } from './handler/event.handler';
+import { QrcodeService } from './service/qrcode.service';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { EventHandler } from './handler/event.handler';
       { name: User.name, schema: UserSchema },
     ]),
   ],
-  providers: [StartAndRegisterHandler, EventHandler, MainMenuHandler, UserService, TicketService],
+  providers: [StartAndRegisterHandler, EventHandler, MainMenuHandler, UserService, TicketService, QrcodeService],
   exports: [],
 })
 export class AppModule {}

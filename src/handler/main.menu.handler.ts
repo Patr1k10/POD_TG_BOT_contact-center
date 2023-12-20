@@ -6,6 +6,7 @@ import { eventMenu, groupMenu } from '../battons/app.buttons';
 import { TicketService } from '../service/ticket.service';
 import { HELP_MESSAGE } from '../constants/massage';
 import { events } from '../constants/events';
+import { QrcodeService } from '../service/qrcode.service';
 
 @Update()
 export class MainMenuHandler {
@@ -14,6 +15,7 @@ export class MainMenuHandler {
   constructor(
     private readonly userService: UserService,
     private readonly ticketService: TicketService,
+    private readonly qrcodeService: QrcodeService,
   ) {}
 
   @Action('choose_event')
@@ -31,8 +33,15 @@ export class MainMenuHandler {
       await ctx.reply('У вас немає жодних квитків.');
     } else {
       for (const ticket of tickets) {
-        const ticketInfo = `Назва події: ${ticket.eventName}\nДата: d:${ticket.eventDate.day} m:${ticket.eventDate.month} y:${ticket.eventDate.year}\nМісце: ${ticket.eventLocation}`;
-        await ctx.reply(ticketInfo);
+        const ticketInfo = `
+        Назва події: ${ticket.eventName} 
+        Дата: ${ticket.eventDate.day}.${ticket.eventDate.month}.${ticket.eventDate.year} 
+        Місце номер: ${ticket.eventLocation}
+        Власнык: 
+        Имя: ${ctx.session.first_name}
+        Призвище: ${ctx.session.last_name}
+        Телефон: +${ctx.session.fullPhoneNumber.countryCode}${ctx.session.fullPhoneNumber.phoneNumber}`;
+        await this.qrcodeService.sendQRCodeToUser(ctx, ticketInfo);
       }
     }
   }

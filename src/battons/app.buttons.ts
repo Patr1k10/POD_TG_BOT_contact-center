@@ -59,3 +59,7 @@ export function dateMenuByEvent(selectedEvent: any) {
     columns: 2,
   });
 }
+
+export function backButton() {
+  return Markup.inlineKeyboard([Markup.button.callback('↩️Повернутися', 'back')]);
+}
