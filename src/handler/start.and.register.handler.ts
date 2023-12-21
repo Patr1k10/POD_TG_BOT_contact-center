@@ -33,6 +33,13 @@ export class StartAndRegisterHandler {
     this.logger.log('register');
     await ctx.reply('🔽Натисніть кнопку🔽', createPhoneNumberButton());
   }
+
+  @Hears('Скасовувати')
+  async registerAbort(ctx: IContext) {
+    this.logger.log('registerAbort');
+    await ctx.deleteMessage();
+    await ctx.reply('Вибачте без вищих контактів ми не зможемо надати вам послуги', registerButton());
+  }
   //Handle incoming contact information.
   @On('contact')
   async onContact(ctx: IContext) {
