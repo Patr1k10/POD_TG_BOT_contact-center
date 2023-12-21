@@ -1,7 +1,7 @@
 import { Markup } from 'telegraf';
 
 export const createPhoneNumberButton = () => {
-  return Markup.keyboard([[{ text: 'Надіслати номер телефону', request_contact: true }]])
+  return Markup.keyboard([[{ text: 'Надіслати номер телефону', request_contact: true }], [{ text: 'Скасовувати' }]])
     .oneTime()
     .resize();
 };
@@ -58,4 +58,8 @@ export function dateMenuByEvent(selectedEvent: any) {
   return Markup.inlineKeyboard(buttons, {
     columns: 2,
   });
+}
+
+export function backButton() {
+  return Markup.inlineKeyboard([Markup.button.callback('↩️Повернутися', 'back')]);
 }

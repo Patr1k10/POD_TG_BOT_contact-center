@@ -11,11 +11,13 @@ import { UserService } from './service/user.service';
 import { MainMenuHandler } from './handler/main.menu.handler';
 import { TicketService } from './service/ticket.service';
 import { EventHandler } from './handler/event.handler';
+import { QrcodeService } from './service/qrcode.service';
+import { errorHandlingMiddleware } from './middleware/global-error.filter';
 
 @Module({
   imports: [
     TelegrafModule.forRoot({
-      middlewares: [createSessionMiddleware()],
+      middlewares: [createSessionMiddleware(), errorHandlingMiddleware()],
       token: process.env.TELEGRAM_TOKEN,
     }),
     MongooseModule.forRootAsync({
@@ -27,7 +29,7 @@ import { EventHandler } from './handler/event.handler';
       { name: User.name, schema: UserSchema },
     ]),
   ],
-  providers: [StartAndRegisterHandler, EventHandler, MainMenuHandler, UserService, TicketService],
+  providers: [StartAndRegisterHandler, EventHandler, MainMenuHandler, UserService, TicketService, QrcodeService],
   exports: [],
 })
 export class AppModule {}

@@ -10,6 +10,7 @@ const mongoStore = Mongo({
   database: process.env.MONGODB_NAME,
 });
 
+// Function to create a Telegraf session middleware
 export function createSessionMiddleware(): Middleware<IContext> {
   return async (ctx, next) => {
     const key = ctx.from && ctx.chat ? `${ctx.from.id}:${ctx.chat.id}` : null;
